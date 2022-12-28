@@ -73,7 +73,7 @@ This tutorial outlines the implementation of on-premises Active Directory within
                 - Create password
             - Select next, follow the prompts and finish up by selecting install. 
                 - DC-1 will automatically restart.
--Log back into DC-1 as user: mydomain.com\labuser               
+- Log back into DC-1 as user: mydomain.com\labuser               
 
 
 
@@ -82,12 +82,23 @@ This tutorial outlines the implementation of on-premises Active Directory within
 </p>
 
 
-<h3>Step 4: Create an Admin and Normal User Account in AD v1.15.8</h3>
+<h3>Step 4: Create an Admin and Normal User Account in Active Directory v1.15.8</h3>
      
-- Download osTicket (download from within lab files: [link](https://drive.google.com/drive/u/0/folders/1APMfNyfNzcxZC6EzdaNfdZsUwxWYChf6))
-- Right click on the file and select extract all
-- Copy the “upload” folder INTO c:\inetpub\wwwroot
-- Rename “upload” to “osTicket”
+- On DC-1, open up Server Manager
+	- Click tools at the top right hand side
+		- select Active Directory Users and Computers.
+			- Right click mydomain.com -> New -> Select Oranizational Unit (We will be creating 2 folders.)
+				- Name one _EMPLOYEES and the other _ADMINS
+			- Right click mydomain.com and click referesh to sort the new organizational units to the top.
+				- Go to _ADMINS organzational unit -> right click -> New -> User
+					- First/Last name: jane doe
+					- user login name: jane_admin
+					- Select next and create a password 
+						- uncheck all boxes, select next and then select finish
+				- Go to _ADMINS organzational unit -> right click Jane doe -> select properties
+					- Click "member of" tab -> Select Add -> type in domain admins -> Check Names -> OK -> Apply
+- Log out of DC-1 as "labuser" and log back in as “mydomain.com\jane_admin”
+
 
 
 <p align="center">
@@ -99,10 +110,16 @@ This tutorial outlines the implementation of on-premises Active Directory within
 <h3>Step 5: Join Client-1 to your domain (mydomain.com)
 </h3>
 
-- Search for Internet Information Services (IIS) and select open
-- On the left, select Sites -> Default Website -> osTicket
-- On the right, click “Browse *:80”
-- Before continuing, head back to and open IIS.
+- Go back to the Azure portal. 
+	- Go to Client-1 Virtual Machine
+		- On the left hand side select Networking -> select the link next to the NIC -> DNS server -> Custom -> type in DC-1's private IP address -> Save
+		- After it is done updating, select restart and select yes
+- Log back into Client-1 using Microsoft Remote Desktop as original local admin (labuser)
+	- Right click the start menu and select System
+		- On right hand side, select Rename this PC (advanced) -> Change -> Under Member of, select domain -> type mydomain.com and select OK
+			- Username: mydomain.com\jane_admin
+			- Type in password and press OK
+- Restart the computer 			
 
 
 <p align="center">
@@ -111,16 +128,13 @@ This tutorial outlines the implementation of on-premises Active Directory within
 <h3>Step 6:  Setup Remote Desktop for non-adminitrative users on Client-1
 </h3>
 
-- Go back to IIS, Sites -> Default Web Site -> osTicket
-- Double-click PHP Manager
-- Click “Enable or disable an extension” at the bottom under “PHP Extensions”
-- Right click and enable the following
-    - php_imap.dll
-    - php_intl.dll
-    - Php_opcache.dll
+- Log back into Client-1 
+	- use mydomain.com\jane_admin
+		- Right click the start menu and select System
+			- On the right hand side, select Remote Desktop -> under User Accounts, click on select users that can remotely access this PC -> Select add
+			- Type in domain users -> Check Names -> OK. Select Ok again
 
  
-     
  <p align="center">
 <img src="https://i.imgur.com/14pPOdv.png" height="70%" width="70%" alt="Azure Free Account"/> <img src="https://i.imgur.com/okabWbT.png" height="70%" width="70%" alt="Azure Free Services"/>
 </p>
@@ -128,86 +142,17 @@ This tutorial outlines the implementation of on-premises Active Directory within
 <h3>Step 7:   Create a bunch of additional users and attempt to log into client-1 with on of the users
 </h3>
 
-- Intl Extension should now have a green check mark next to it
+- Log back into DC-1 as jane_admin
+	- Search for Powershell_ise, right click on it and open as an administrator
+		- At the top left, select new script and paste the contents of the script into it. You can find the script [here](https://github.com/joshmadakor1/AD_PS/blob/master/Generate-Names-Create-Users.ps1).
+		- Click the green arrow button near the top middle to run the script
+	- Once the users have been created, go back to Active Directory Users and Computers -> mydomain.com -> _EMPLOYEES
+		- You will see all the accounts that were created, in here. 
+- You can now log into Client-1 with one of the accounts that were created. 			
 
 
 <p align="center">
 <img src="https://i.imgur.com/okabWbT.png" height="60%" width="60%" alt="Azure Free Account"/>
 
-
-
-<h3>Step 8: Rename</h3>
- 
-- Open Windows Explorer and select C:-> inetpub-> wwwroot-> osTicket-> Include and rename.
-	- From: C:\inetpub\wwwroot\osTicket\include\ost-sampleconfig.php
-	- To: C:\inetpub\wwwroot\osTicket\include\ost-config.php
-
-
-<p align="center">
-<img src="https://i.imgur.com/rEBpL8Y.png" height="80%" width="80%" alt="Azure Free Account"/>
-
-<h3>Step 9: Assign Permissions: ost-config.php</h3>
-
-- Right click ost-config.php, 
-- Open Properties -> Security -> Advanced -> Permissions 
-- Select Disable inheritance -> Remove all inherited permissions from this object 
-- Afterwards, Select add ->New Permissions -> Everyone -> All
-
-<p align="center">
-<img src="https://i.imgur.com/rEBpL8Y.png" height="80%" width="80%" alt="Azure Free Account"/>
-  
-<h3>Step 10: Continue Setting up osTicket in the browser</h3>
-
-- Go back to browser and click continue
-  - Name: Helpdesk
-  - Email: whichever email you want
-  
-<p align="center">
-<img src="https://i.imgur.com/rEBpL8Y.png" height="80%" width="80%" alt="Azure Free Account"/>
-
-<h3>Step 11: Download and Install HeidiSQL</h3>
-
-- Open HeidiSQL and create new session
-   - User: root
-   - Password : Password1
-- Select Open
-- On the left side, right click “Unamed” -> “Create New” -> “Database
-- Name it “osTicket”
-
- <p align="center">
-<img src="https://i.imgur.com/14pPOdv.png" height="70%" width="70%" alt="Azure Free Account"/> <img src="https://i.imgur.com/okabWbT.png" height="70%" width="70%" alt="Azure Free Services"/>
-</p>
-
-<h3>Step 12:  Go back to the browser and continue setting up osTicket by filling out the fields.</h3>
-
-- First Name: your first name
-- Last Name: your last name
-- Email Address: whichever email you want (needs to be different from the Default Email)
-- Username: user_admin 
-- Password: Password1 
-- MySQL Database: osTicket (the one you just created in HeidiSQL)
-- MySQL Username: root
-- MySQL Password: Password1
-- Finally, click Install Now
-
- <p align="center">
-<img src="https://i.imgur.com/14pPOdv.png" height="70%" width="70%" alt="Azure Free Account"/> <img src="https://i.imgur.com/okabWbT.png" height="70%" width="70%" alt="Azure Free Services"/>
-</p>
-
-🎉Congratulations! You have sucessfully installed osTicket!🎉
-
-<h3>Step 13: Cleanup.</h3>
-
-- Go to C: -> inetpub->wwwroot->osTicket->setup
-    - Delete the contents in the setup folder
-    - Afterwards, delete the setup folder
-- Go to C:-->Inetpub-->wwwroot-->osTicket-->include
-    - Right click on ost-config.php 
-    - Select securities -> Advanced -> edit to change permissions
-	- Allow everyone to only have read and execute
-	
- <p align="center">
-<img src="https://i.imgur.com/14pPOdv.png" height="70%" width="70%" alt="Azure Free Account"/> <img src="https://i.imgur.com/okabWbT.png" height="70%" width="70%" alt="Azure Free Services"/>
-</p>	
-
+🎉Congratulations! You have implementated on-premises Active Directory and created users within Azure Virtual Machines.!🎉
 
