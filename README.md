@@ -139,7 +139,7 @@ This tutorial outlines the implementation of on-premises Active Directory within
 <img src="https://i.imgur.com/14pPOdv.png" height="70%" width="70%" alt="Azure Free Account"/> <img src="https://i.imgur.com/okabWbT.png" height="70%" width="70%" alt="Azure Free Services"/>
 </p>
 
-<h3>Step 7:   Create a bunch of additional users and attempt to log into client-1 with on of the users
+<h3>Step 7:   Create a bunch of additional users and attempt to log into client-1 with one of the users
 </h3>
 
 - Log back into DC-1 as jane_admin
