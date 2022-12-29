@@ -132,7 +132,7 @@ This tutorial outlines the implementation of on-premises Active Directory within
 	- use mydomain.com\jane_admin
 		- Right click the start menu and select System
 			- On the right hand side, select Remote Desktop -> under User Accounts, click on select users that can remotely access this PC -> Select add
-			- Type in domain users -> Check Names -> OK. Select Ok again
+			- Type: domain users -> Check Names -> OK. Select Ok again
 
  
  <p align="center">
