@@ -30,16 +30,30 @@ This tutorial outlines the implementation of on-premises Active Directory within
        - Name: DC-1
        - Image: Windows Server 2022
        - Take note of the Virtual Network (Vnet) that gets created at this time
-       - Set DC-1's virtual Network Interface Card (NIC) Private IP address to be static
-           - Go to DC-1's network settings -> select networking -> select the link next to network interface -> IP Configurations -> ipconfig1 -> Assignment from dynamic to static (this ensures DC-1's IP address will not change)
-    - 2nd virtual machine will be the Client
-       - Name: Client-1
-       - Image: Windows 10 Pro
-       - Use the same resource group and Vnet as DC-1
+       
+<p align="center">
+<img src="https://i.imgur.com/mrpBWtM.png" height="70%" width="70%" alt="Azure Free Account"/>
+
+
+
+ - Set DC-1's virtual Network Interface Card (NIC) Private IP address to be static
+     - Go to DC-1's network settings -> select networking -> select the link next to network interface 
+     - IP Configurations -> ipconfig1 
+     - Assignment from dynamic to static (this ensures DC-1's IP address will not change)
+	   
+<p align="center">
+<img src="https://i.imgur.com/xcyLUOG.png" height="70%" width="70%" alt="Azure Free Account"/> <img src="https://i.imgur.com/ZaWdzTl.png" height="70%" width="70%" alt="Azure Free Services"/>  <img src="https://i.imgur.com/Vn0UhWm.png" height="70%" width="70%" alt="Azure Free Services"/>
+</p>
+
+
+- 2nd virtual machine will be the Client
+     - Name: Client-1
+     - Image: Windows 10 Pro
+     - Use the same resource group and Vnet as DC-1
 
 <p align="center">
-<img src="https://i.imgur.com/Cxy8NM7.png" height="70%" width="70%" alt="Azure Free Account"/> <img src="https://i.imgur.com/f1eRIx4.png" height="70%" width="70%" alt="Azure Free Services"/>
-</p>
+<img src="https://i.imgur.com/Vf7yeY1.png" height="70%" width="70%" alt="Azure Free Account"/> <img src="https://i.imgur.com/3DK41Cr.png" height="70%" width="70%" alt="Azure Free Services"/> 
+
 
 <h3>Step 2: Ensure Connectivity between client and Domain Controller</h3>
 
